@@ -37,10 +37,12 @@ gulp.task('css', function () {
     return gulp.src('src/scss/**/*.scss')
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
-        .pipe(autoprefixer({
+
+        // only autoprefix if --type production
+        .pipe(gutil.env.type === 'production' ? autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
-        }))
+        }) : gutil.noop())
 
         // only minify if --type production
         .pipe(gutil.env.type === 'production' ? cssnano() : gutil.noop())
